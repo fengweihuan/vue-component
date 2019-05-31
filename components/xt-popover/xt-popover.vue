@@ -1,52 +1,42 @@
-<template>
-  <el-popover
-    :width="width"
+<template lang="pug">
+  el-popover(
+    :width="width" 
     placement="right-start"
-    :trigger="trigger"
-    :popper-options="options"
-    :popper-class="popperId + ' my-popper'"
-    :visible-arrow="false"
-    v-model="visible">
-    <div class="popover_wrap" >
-      <div class="header" v-if="title && title.length > 0">{{title}}</div>
-      <div class="popover_content">
-        <div class="popover_item" 
+    v-show="popoverData.length > 0"
+    :trigger="trigger" 
+    :popper-options="options" 
+    :popper-class="popperId + ' my-popper'" 
+    :visible-arrow="false" v-model="visible"
+  )
+    .popover_wrap
+      .header(v-if="title && title.length > 0") {{title}}
+      .popover_content
+        .popover_item(
           v-for="(item, index) in popoverData"
           :key="index"
           :class="item.disabled ? 'disabled' : ''"
-          @click="clickHandle(item)">
-            <el-popover
+          @click="clickHandle(item)"
+        )   
+            el-popover(
               v-if="item.children && item.children.length > 0 && childrenVisible"
               placement="right-start"
               :width="width"
-              trigger="hover">
-              <div class="popover_wrap" @click="childrenHidden">
-                <div class="popover_content">
-                  <div class="popover_item" 
-                    v-for="(list, ind) in item.children"
-                    :key="ind"
-                    :class="list.disabled ? 'disabled' : ''"
-                    @click="clickHandle(list)">
-                    <span>{{list.label}}</span>
-                  </div>
-                </div>
-              </div>
-              <div slot="reference" class="popover_childer" >
-                <span class="right_icon iconfont icon-arrfill"></span>
-              </div>
-            </el-popover>
-            <!-- 递归循环组件 有点问题 先不要用 ┭┮﹏┭┮    -->
-            <!-- <popover-childer 
+              trigger="hover"
+            )  
+              .popover_wrap(@click="childrenHidden")
+                .popover_content
+                  .popover_item(v-for="(list, ind) in item.children" :key="ind" :class="list.disabled ? 'disabled' : ''" @click="clickHandle(list)") 
+                    span {{list.label}}
+              div(slot="reference" class="popover_childer")
+                span(class="right_icon iconfont icon-arrfill")
+            //- 递归循环组件 有点问题 先不要用 ┭┮﹏┭┮    
+             <popover-childer 
               v-if="item.children && item.children.length > 0"
               :childrenData="item.children"
               :width="width"
-            ></popover-childer>  -->
-            <span>{{item.label}}</span>
-        </div>
-      </div>
-    </div>
-    <span slot="reference" ref="refDiv" style="position:fixed;"></span>
-  </el-popover>
+            //- ></popover-childer>  
+            span {{item.label}}
+    span(slot="reference" ref="refDiv" style="position:fixed;")
 </template>
 
 <script>
@@ -130,6 +120,9 @@ export default {
       if (this.autoClose) {
           this.visible = false
         }
+      // if (row.click && typeof row.click === 'function') {
+      //   row.click()
+      // }
       this.$emit('clickItem', row)
     },
     childrenHidden () {

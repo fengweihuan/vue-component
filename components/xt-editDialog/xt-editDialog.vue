@@ -1,6 +1,6 @@
 <template lang="pug">
-  xt-dialog(:title="type === 'edit' ? '编辑' + title : '新增' + title " ref="editDialog" :autoclose="autoclose" @confirm="$refs.xtForm.submit()")
-    xt-form(@submit="onSubmit" :formList="formList" ref="xtForm" :maxlength="maxlength")
+  xt-dialog(:title="type === 'edit' ? '编辑' + title : '新增' + title " ref="editDialog" v-bind="$attrs" :autoclose="autoclose" @confirm="$refs.xtForm.submit()")
+    xt-form(@submit="onSubmit" :formList="formList" ref="xtForm" :maxlength="maxlength" v-bind="$attrs")
 </template>
 <script>
 import xtDialog from '../xt-dialog'
@@ -22,7 +22,7 @@ export default {
     },
     maxlength: {
       type: Number,
-      default: 20
+      default: 30
     },
     autoclose:{
       type: Boolean,
@@ -35,9 +35,9 @@ export default {
     }
   },
   methods: {
-    open (row) {
+    open (row, type) {
       this.$refs.editDialog.open()
-      if (row) {
+      if (row && type !== 'create') {
         this.type = 'edit'
         this.$nextTick(() => {
           this.$refs.xtForm.setForm(row)
@@ -46,6 +46,9 @@ export default {
         this.type = 'create'
         this.$nextTick(() => {
           this.$refs.xtForm.reset()
+          if (type && type === 'create') {
+            this.$refs.xtForm.setForm(row)
+          }
         })
       }
     },

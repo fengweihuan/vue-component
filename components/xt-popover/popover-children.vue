@@ -1,33 +1,13 @@
-<template >
-  <el-popover
-    placement="right-start"
-    :width="width"
-    v-model="visible"
-    :visible-arrow="false"
-    trigger="hover">
-    <div class="popover_wrap" @mouseover="$emit('showVisible')" @mouseout="$emit('hideVisible')">
-      <div class="popover_content">
-        <div class="popover_item" 
-          v-for="(list, ind) in childrenData"
-          :key="ind"
-          :class="list.disabled ? 'disabled' : ''"
-          @click="clickHandle(list)">
-          <popover-children 
-            v-if="list.children && list.children.length > 0" 
-            :width="width" 
-            :childrenData="list.children"
-            @showVisible="showVisible"
-            @hideVisible="hideVisible"
-          ></popover-children>
-          <span>{{list.label}}</span>
-        </div>
-      </div>
-    </div>
-    <div slot="reference" class="popover_childer" >
-      <span class="right_icon iconfont icon-arrfill"></span>
-      <div class="right_gap"></div>
-    </div>
-  </el-popover>
+<template lang="pug">
+  el-popover(placement="right-start" :width="width" v-model="visible" :visible-arrow="false" trigger="hover")
+    .popover_wrap(@mouseover="$emit('showVisible')" @mouseout="$emit('hideVisible')")
+      .popover_content
+        .popover_item(v-for="(list, ind) in childrenData" :key="ind" :class="list.disabled ? 'disabled' : ''" @click="clickHandle(list)")
+          popover-children(v-if="list.children && list.children.length > 0" :width="width" :childrenData="list.children" @showVisible="showVisible") 
+          span {{list.label}}
+    div(slot="reference" class="popover_childer")
+      span(class="right_icon iconfont icon-arrfill")
+      .right_gap
 </template>
 <script>
 export default {

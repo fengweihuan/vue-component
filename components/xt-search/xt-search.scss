@@ -1,0 +1,38 @@
+.xt-search {
+  .xt-search-row {
+    font-size: 14px;
+    color: #8a92a5;
+    display: flex;
+    align-items: center;
+  }
+  input{
+    // border: none;
+  }
+  // .el-range-editor.el-input__inner {
+  //   border: none;
+  // }
+  .xt-search-row + .xt-search-row {
+    border-top: 1px dashed #ddd;
+  }
+  .xt-search-title {
+    width: 100px;
+  }
+  .el-form--inline {
+    float: left;
+  }
+  .el-form-item__label {
+    width: auto !important;
+    margin-right: 8px;
+    padding: 0;
+  }
+  .el-form-item__content {
+    margin-left: 0 !important;
+  }
+  .el-form-item {
+    margin-bottom: 10px !important;
+  }
+  .el-input__inner,
+  .xt-button {
+    
+  }
+}

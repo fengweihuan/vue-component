@@ -1,7 +1,7 @@
 <template lang="pug">
   transition(name="el-fade-in")
     .drag-dialog(
-      v-if="visible"
+      v-show="visible"
       :style="{left,top,zIndex}"
       ref="dragDialog"
     )
@@ -10,13 +10,13 @@
         :style="{cursor: drag ? 'move' : 'auto'}"
       )
         span.drag_title  {{title || ''}}
-        i.el-icon-close(@click="visible = false")
+        i.el-icon-close(@click="closeHandle")
       .drag_content(:style="{minHeight:height,minWidth:width}")
         slot
       .drag_footer(v-if="hasFooter")
         slot(name="footer")
-          el-button(@click="visible = false" size="small") 取消
-          el-button(@click="submitHandle" type="primary" size="small") 确定
+          el-button(@click="closeHandle" size="small") 取消
+          el-button(@click="submitHandle" type="primary" size="small") {{ confirmText }}
 </template>
 <script>
 export default {
@@ -57,6 +57,13 @@ export default {
     zIndex: {
       type: Number,
       default: 200
+    },
+    beforeClose: {
+      type: Function
+    },
+    confirmText: {
+      type: String,
+      default: '确定'
     }
   },
   data () {
@@ -110,6 +117,13 @@ export default {
       }
       dragDom.style.left = left + 'px' 
       dragDom.style.top = top + 'px'
+    },
+    closeHandle () {
+      if (this.beforeClose) {
+        this.beforeClose(this.hide)
+      } else {
+        this.hide()
+      }
     }
   }
 }
@@ -124,6 +138,7 @@ export default {
   -webkit-box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   overflow: hidden;
+  max-width: 84vw;
   .drag_header{
     font-size: 18px;
     height: 38px;
